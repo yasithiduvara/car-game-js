@@ -1,6 +1,12 @@
 document.addEventListener("keydown", event => {
-    if(event.key==="ArrowLeft"){moveLeft();}
-    if(event.key==="ArrowRight"){moveRight();}
+    if(event.key==="ArrowLeft"){
+        moveLeft();
+        playSound();
+    }
+    if(event.key==="ArrowRight"){
+        moveRight();
+        playSound();
+    }
   });
   var character = document.getElementById("character");
   function moveLeft(){
@@ -17,6 +23,26 @@ document.addEventListener("keydown", event => {
           character.style.left = left + "px";
       }
   }
+  function playSound(){
+    var sound = document.getElementById("sound");
+    sound.currentTime = 0;
+    sound.play()
+    
+  }
+
+  function playSoundCarCrash( callback){
+
+    var carSound = document.getElementById("sound1");
+    carSound.currentTime = 0;
+    carSound.play()
+
+    carSound.addEventListener('ended', function(){
+        callback("")
+    })
+
+  }
+
+
   var block = document.getElementById("block");
   var counter = 0;
   block.addEventListener('animationiteration', () => {
@@ -25,14 +51,19 @@ document.addEventListener("keydown", event => {
       block.style.left = left + "px";
       counter++;
   });
+
   setInterval(function(){
       var characterLeft = parseInt(window.getComputedStyle(character).getPropertyValue("left"));
       var blockLeft = parseInt(window.getComputedStyle(block).getPropertyValue("left"));
       var blockTop = parseInt(window.getComputedStyle(block).getPropertyValue("top"));
-      if(characterLeft==blockLeft && blockTop<500 && blockTop>300){
-          alert("[YASH CODING] Game over!!!!  Your Score: " + counter);
-          block.style.animation = "none";
+      if(characterLeft==blockLeft && blockTop<500 && blockTop>300){ 
+        playSoundCarCrash(function(result){
+            alert("[YASH CODING] Game over!!!!  Your Score: " + counter + " " + result);
+        })     
+        block.style.animation = "none"; 
+          
       }
+
   },1);
   
   
